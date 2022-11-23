@@ -49,7 +49,7 @@ Then, we will use our context to activate button and page to manage our product 
 
 - 4/ Now, create a new page *Login.jsx*
 
-- 5/ Add a nav bar to all your pages, with a <Link to="/"> and an other one <Link to="/login" > to access your page. Don"t forget to style the nav bar a little bit with the tailwind library
+- 5/ Add a nav bar to all your pages, with a <Link to="/"> and an other one <Link to="/login" > to access your page. Don"t forget to style the nav bar a little bit with the tailwind library. Integrate then the *Login.jsx* in the route in *App.jsx*
 
 - 6/ On the *Login.jsx* page, add to input (email and password). Create a global state to control it as an object. Add a <Button> with a function (handleLogin()), triggered `onClick` that `console.log()` the value of your state.
 
