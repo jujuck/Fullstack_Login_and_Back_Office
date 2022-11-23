@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import apiConnexion from "@services/apiConnexion";
 import logo from "@assets/logo.png";
 
 function Login() {
@@ -13,7 +14,13 @@ function Login() {
       emailPattern.test(connexion.email) &&
       pwdPattern.test(connexion.password)
     ) {
-      console.error(connexion);
+      apiConnexion
+        .post("/login", { body: connexion })
+        .then((res) => console.warn(res))
+        .catch((err) => {
+          console.error(err);
+          setMessage("Wrongs credentials");
+        });
     } else {
       setMessage("Invalid credentials");
     }
