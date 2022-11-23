@@ -60,7 +60,7 @@ Then, we will use our context to activate button and page to manage our product 
 Add a <Button> with a function (handleLogin()), triggered `onClick` that `console.log()` the value of your state.
 
 - 7/ Adding some logique, we will check the validity of the email and the password, to activate the button.
-Use the regex here to test (/^[^\s@]+@[^\s@]+\.[^\s@]+$/) the email, and this one for password (^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]))
+Use the regex here to test (/^[^\s@]+@[^\s@]+\.[^\s@]+$/) the email, and this one for password (/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])/). If the test succeed, we will send the request, else, add a message to your user for incorrect credentials.
 
 - 8/ Now, on your function, ``` POST ``` your state to the ``` /login ``` endPoint on your back end.
     - on your backend, create a new file *login.js* on the controller folder. Inside, create a fonction `login()` that `console.log()` the data you post (on your body).
