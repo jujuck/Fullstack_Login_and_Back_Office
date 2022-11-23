@@ -2,9 +2,12 @@ const express = require("express");
 
 const router = express.Router();
 
-const itemControllers = require("./controllers/CarsControllers");
+const carsControllers = require("./controllers/CarsControllers");
+const usersControllers = require("./controllers/UsersController");
 
-router.get("/cars", itemControllers.browse);
-router.get("/cars/:id", itemControllers.read);
+router.get("/cars", carsControllers.browse);
+router.get("/cars/:id", carsControllers.read);
+
+router.post("/login", usersControllers.validateUser);
 
 module.exports = router;
