@@ -5,7 +5,14 @@ function Login() {
   const [connexion, setConnexion] = useState({ email: "", password: "" });
 
   const handleSubmit = () => {
-    console.error(connexion);
+    const emailPattern = /^[^s@]+@[^s@]+.[^s@]+$/;
+    const pwdPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])/;
+    if (
+      emailPattern.test(connexion.email) &&
+      pwdPattern.test(connexion.password)
+    ) {
+      console.error(connexion);
+    }
   };
   return (
     <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
