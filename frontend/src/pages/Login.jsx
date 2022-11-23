@@ -3,8 +3,10 @@ import logo from "@assets/logo.png";
 
 function Login() {
   const [connexion, setConnexion] = useState({ email: "", password: "" });
+  const [message, setMessage] = useState("");
 
   const handleSubmit = () => {
+    setMessage("");
     const emailPattern = /^[^s@]+@[^s@]+.[^s@]+$/;
     const pwdPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])/;
     if (
@@ -12,6 +14,8 @@ function Login() {
       pwdPattern.test(connexion.password)
     ) {
       console.error(connexion);
+    } else {
+      setMessage("Invalid credentials");
     }
   };
   return (
@@ -67,6 +71,7 @@ function Login() {
               />
             </div>
           </div>
+          <p>{message}</p>
           <div>
             <button
               type="button"
