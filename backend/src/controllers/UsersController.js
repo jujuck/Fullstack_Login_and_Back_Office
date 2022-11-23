@@ -15,9 +15,21 @@ const validateUser = (req, res) => {
     }),
     password: Joi.string().min(8).max(25).required(),
   }).validate(req.body, { abortEarly: false });
-  console.error(error);
-  console.error(user);
-  res.send("OK");
+
+  if (
+    !error &&
+    req.body.email === user.email &&
+    req.body.password === user.password
+  ) {
+    res
+      .status(201)
+      .cookie("access_token", "connexion validated", {
+        httpOnly: true,
+      })
+      .json({ name: user.name, role: user.role, email: user.email });
+  } else {
+    res.status(500).send("Wrongs credentials");
+  }
 };
 
 module.exports = { validateUser };
