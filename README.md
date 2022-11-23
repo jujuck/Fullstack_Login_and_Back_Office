@@ -63,7 +63,7 @@ Add a <Button> with a function (handleLogin()), triggered `onClick` that `consol
 Use the regex here to test (/^[^\s@]+@[^\s@]+\.[^\s@]+$/) the email, and this one for password (/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])/). If the test succeed, we will send the request, else, add a message to your user for incorrect credentials.
 
 - 8/ Now, on your function, ``` POST ``` your state to the ``` /login ``` endPoint on your back end.
-    - on your backend, create a new file *login.js* on the controller folder. Inside, create a fonction `login()` that `console.log()` the data you post (on your body). Don't forget to add the route ou your *router.js* file.
+    - on your backend, create a new file *userController.js* on the controller folder. Inside, create a fonction `login()` that `console.log()` the data you post (on your body). Don't forget to add the route ou your *router.js* file.
     - on top of this file, we will create a constante with some fake data to check 
     ```
     const user = {
@@ -73,7 +73,7 @@ Use the regex here to test (/^[^\s@]+@[^\s@]+\.[^\s@]+$/) the email, and this on
       role: "admin"
     }
     ```
-    - In you function, use Joy to check the data you receive (correct email, correct password)
+    - In you function, use Joy to check the data you receive (correct email, correct password) (cd backend, npm install joy)
     - If `false` => `res.status(400).send("Wrong credentials")
     - If `true` => next step, check if the eamil is right and the password too
         - If `false` => `res.status(400).send("Wrong credentials")
