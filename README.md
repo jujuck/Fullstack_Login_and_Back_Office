@@ -118,7 +118,7 @@ const ExportContextUser = {
 };
 export default ExportContextUser;
 ```
-    - Add this line of exeption on your eslint rules "react/jsx-no-constructed-context-values": "off",
+    - Add this line of exeption on your eslint rules "react/jsx-no-constructed-context-values": "off", and the new alias "@context": "./src/context", in your jsconfig file ("@context/*": ["src/context/*"]) and in your vite.config.js ("@context": path.resolve(__dirname, "src/context"),)
     - Add the `ExportContextUser` globaly on your app, just below the *<BrowserRouter>*
     - Import the **context** on your *login.jsx* and consume the `handleuser(data)` function to memorize it. Then `navigate()`.
 
