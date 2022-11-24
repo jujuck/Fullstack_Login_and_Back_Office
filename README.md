@@ -73,7 +73,7 @@ Use the regex here to test (/^[^\s@]+@[^\s@]+\.[^\s@]+$/) the email, and this on
       role: "admin"
     }
     ```
-    - In you function, use Joy to check the data you receive (correct email, correct password)
+    - In you function, use Joi to check the data you receive (correct email, correct password) (cd backend, npm install joy)
     - If `false` => `res.status(400).send("Wrong credentials")
     - If `true` => next step, check if the eamil is right and the password too
         - If `false` => `res.status(400).send("Wrong credentials")
