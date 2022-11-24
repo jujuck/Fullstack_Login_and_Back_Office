@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import apiConnexion from "@services/apiConnexion";
+import User from "@context/User";
 import logo from "@assets/logo.png";
 
 function Login() {
   const [connexion, setConnexion] = useState({ email: "", password: "" });
   const [message, setMessage] = useState("");
+  const userContext = useContext(User.UserContext);
   const navigate = useNavigate();
 
   const handleSubmit = () => {
@@ -20,7 +22,7 @@ function Login() {
         .post("/login", { ...connexion })
         .then((res) => {
           navigate("/");
-          console.warn(res);
+          userContext.handleUser(res.data);
         })
         .catch((err) => {
           setMessage(err.response.data);
