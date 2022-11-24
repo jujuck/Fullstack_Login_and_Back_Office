@@ -1,7 +1,7 @@
 const Joi = require("joi");
 
 const user = {
-  email: "trainer@wildcodeschool.com",
+  email: "john@wildcodeschool.com",
   password: "WildCodeSchool2022",
   name: "John Smith",
   role: "admin",

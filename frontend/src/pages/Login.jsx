@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import apiConnexion from "@services/apiConnexion";
 import logo from "@assets/logo.png";
 
 function Login() {
   const [connexion, setConnexion] = useState({ email: "", password: "" });
   const [message, setMessage] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = () => {
     setMessage("");
@@ -15,11 +17,13 @@ function Login() {
       pwdPattern.test(connexion.password)
     ) {
       apiConnexion
-        .post("/login", { body: connexion })
-        .then((res) => console.warn(res))
+        .post("/login", { ...connexion })
+        .then((res) => {
+          navigate("/");
+          console.warn(res);
+        })
         .catch((err) => {
-          console.error(err);
-          setMessage("Wrongs credentials");
+          setMessage(err.response.data);
         });
     } else {
       setMessage("Invalid credentials");
@@ -69,7 +73,7 @@ function Login() {
                 type="password"
                 value={connexion.password}
                 onChange={(e) =>
-                  setConnexion({ ...connexion, password: e.target.value })()
+                  setConnexion({ ...connexion, password: e.target.value })
                 }
                 autoComplete="current-password"
                 required
