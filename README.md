@@ -17,7 +17,8 @@ It's pre-configured with a set of tools which'll help students produce industry-
 - `setup` : Initialization of frontend and backend, as well as all toolings
 - `migrate` : Run the database migration script
 - `dev` : Starts both servers (frontend + backend) in one terminal
-- `dev-front` : Starts the React frontend server
+- `dev-front` : Starts the React fron    - Add this line of exeption on your eslint rules "react/jsx-no-constructed-context-values": "off",
+tend server
 - `dev-back` : Starts the Express backend server
 - `lint` : Runs validation tools, and refuses unclean code (will be executed on every _commit_)
 - `fix` : Fixes linter errors (run it if `lint` growls on your code !)
@@ -49,7 +50,8 @@ Then, we will use our context to activate button and page to manage our product 
 
 - 4/ Now, create a new page *Login.jsx*
 
-- 5/ Add a nav bar to all your pages, with a <Link to="/"> and an other one <Link to="/login" > to access your page. Don"t forget to style the nav bar a little bit with the tailwind library. Integrate then the *Login.jsx* in the route in *App.jsx*
+- 5/ Add a nav bar to all your pages,     - Add this line of exeption on your eslint rules "react/jsx-no-constructed-context-values": "off",
+with a <Link to="/"> and an other one <Link to="/login" > to access your page. Don"t forget to style the nav bar a little bit with the tailwind library. Integrate then the *Login.jsx* in the route in *App.jsx*
 
 - 6/ On the *Login.jsx* page, add two inputs (email and password). Create a global state to control it as an object. On the input manage the change of your state by merging your old state with the new value of your key
   ```
@@ -118,6 +120,7 @@ const ExportContextUser = {
 };
 export default ExportContextUser;
 ```
+    - Add this line of exeption on your eslint rules "react/jsx-no-constructed-context-values": "off", and the new alias "@context": "./src/context"
     - Add the `ExportContextUser` globaly on your app, just below the *<BrowserRouter>*
     - Import the **context** on your *login.jsx* and consume the `handleuser(data)` function to memorize it. Then `navigate()`.
 
