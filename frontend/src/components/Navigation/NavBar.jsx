@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import logo from "@assets/logo.png";
 
-function NavBar() {
+function NavBar({ user, handleUser }) {
   return (
     <header>
       <nav className="px-2 sm:px-4 mb-5 ">
@@ -28,13 +28,33 @@ function NavBar() {
                 </Link>
               </li>
               <li>
-                <Link
-                  to="/Login"
-                  class="block rounded-2xl p-5 m-2 text-gray-700 rounded hover:bg-zinc-200 text-xl"
-                >
-                  Se Connecter
-                </Link>
+                {user ? (
+                  <button
+                    type="button"
+                    className="block rounded-2xl p-5 m-2 text-gray-700 rounded hover:bg-zinc-200 text-xl"
+                    onClick={() => handleUser(null)}
+                  >
+                    Se Déconnecter
+                  </button>
+                ) : (
+                  <Link
+                    to="/Login"
+                    class="block rounded-2xl p-5 m-2 text-gray-700 rounded hover:bg-zinc-200 text-xl"
+                  >
+                    Se Connecter
+                  </Link>
+                )}
               </li>
+              {user?.role === "admin" && (
+                <li>
+                  <Link
+                    to="/Administration"
+                    class="block rounded-2xl p-5 m-2 text-gray-700 rounded hover:bg-zinc-200 text-xl"
+                  >
+                    Administration
+                  </Link>
+                </li>
+              )}
             </ul>
           </div>
         </div>

@@ -119,10 +119,10 @@ const ExportContextUser = {
 export default ExportContextUser;
 ```
     - Add this line of exeption on your eslint rules "react/jsx-no-constructed-context-values": "off", and the new alias "@context": "./src/context", in your jsconfig file ("@context/*": ["src/context/*"]) and in your vite.config.js ("@context": path.resolve(__dirname, "src/context"),)
-    - Add the `ExportContextUser` globaly on your app, just below the *<BrowserRouter>*
-    - Import the **context** on your *login.jsx* and consume the `handleuser(data)` function to memorize it. Then `navigate()`.
+    - Add the `ContextUser` globaly on your app, in the *main.jsx*
+    - Import the **context** on your *login.jsx* and consume the `handleUser(data)` function to memorize it. Then `navigate()`.
 
-- 12/ Now, on your *Navbar.jsx*, connect the `UserContext` and grab the user information. If the `role === "admin"`, then, show a new <Link to="/administration" />. As well; if a user is connected, don't show the login page, but a <Button onClick="setUser(null)" /> to disconnect.
+- 12/ In your *app.jsx*, import your context on a global scope and pass `user` and the `handleUser()` on props to the NavBar component. Now, on your *Navbar.jsx*, if the `user.role === "admin"`, then, show a new <Link to="/administration" />. As well, if a user is connected, don't show the login page, but a <Button onClick="setUser(null)" /> to disconnect. Don
 
 - 13/ Create a new page *Administration.jsx*, with a h1 inside. (We will implement the page on the second part) and add it to your router in the *App.jsx*. But we sould protect it from any user that is not admin.
     - Create a new folder *Layout* and inside, create a new file *ProtectedRoute.jsx*.
