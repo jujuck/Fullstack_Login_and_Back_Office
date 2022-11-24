@@ -6,6 +6,7 @@ import Login from "@pages/Login";
 
 import "./App.css";
 import NavBar from "@components/Navigation/NavBar";
+import Administration from "@pages/Administration";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/cars/:id" element={<Cars />} />
             <Route path="/Login" element={<Login />} />
+            <Route path="/Administration" element={<Administration />} />
           </Routes>
         </div>
       </User.UserProvider>
