@@ -146,9 +146,40 @@ export default ExportContextUser;
 Congrats !!! Your have now a fully operationnel login system.
 
 ### Second part
+  
+## We will start with the back end part of the storie. So open, Postman, get ready to send a Post request with a body in Json format.
+Here is an example of the data
+  ```
+{
+"car_make": "Aston Martin",
+"car_model": "Vanquish S",
+"car_year_model": "2005",
+"color": "Red",
+"city": "Qintong",
+"descr": "In hac habitasse platea dictumst. Morbi vestibulum, velit id pretium iaculis, diam erat fermentum justo, nec condimentum neque sapien placerat ante. Nulla justo.",
+"title": "Donec ut mauris eget massa tempor convallis. Nulla neque libero, convallis eget, eleifend luctus, ultricies eu, nibh.",
+"keyword": "nec nisi vulputate nonummy maecenas"
+}
+```
+- 1/ Add a add() function on your *carsController.js* and don't forget to implement your new "POST" route on the *router.js*.
+On this `add()`, console.log() your data and send a response to the client.
+  
+- 2/ Now we setup the validation of the data with the `joi` module, which is already setup on this repos. On *services* folder (for re-usability), we will create a file *cars.js* with a function `validate`. This function will have 2 parameters, `data` and `type` ("required" in this case).
+    - On validation side, first we need to create a Joi object with a list of key (see the doc if needed to match with the database constraint.) and return the possible error.
 
-- 1/ Create the querry on manager.
-    We will begin by adding car. for this we will need to create a function `insert` on our *CarsManager.js* on the models folder . This `insert` function will return the connection to the table and the querry we need for create a new entry on our database.
+  ```
+  return Joi.object({
+    car_make: Joi.string().min(3).max(255).presence(presence),
+    ...
+  }).validate(data,{abortEarly: false }).error;
+  ```
+  Don't forget to export your function and import (require) it on your *carsControllers.js*.
+  
+- 3/ On your *carsControllers.js*, call your `validate(data, "required") function and check the potential error
+    -If !error, res.send("OK").
+    -Else res.send the error with the correct status
+  
+- 4/ On the *carsManagers.js*, we need to create a function `insert()`. This `insert()` function will return the query we need for create a new entry on our database. 
     ```
     insert(data) {
       return this.connection.query(
@@ -161,71 +192,35 @@ Congrats !!! Your have now a fully operationnel login system.
   }
     ```
 
-- 2/ Add the gestion on controller.
-    now we will create the function`add` on our    *CarsControllers.js* on the controllers folder . This `add` function will be create, we will build an habitual skeleton with call of the `insert` function precedently create, manage the response we send to front and manage the error.
+- 5/ Back on your *carsControllers.js*, add the call() to this new methods with the data.
+    If an error occured, don't forget to catch it and manage it
+    Otherwise, we got the confirmation of the new data on our response with the insertId. Before sending it back to the client, we need to call the `findCount()` method to update our number of page
+    .then(), send all the data and count back to the client
+  
+  ```
+  res
+    .status(200)
+    .send({
+      cars: { ...req.body, id: createdCars[0].insertId },
+      pages: Math.ceil(count[0].pages / 50),
+    });
+ ```
+  
+## On the Front
 
-- 2 bis/ add pages count.
-    we will need recalculate the amount of pages on back and give it to front to update front if needed.
+- 6/ Create the form on frontend, we need to prepare a form on the *Administration.jsx* page and to connect it with the back by calling the back endpoint added previously. We will need one state to store all the data of this form initialised on object with all keys of the `table` as an empty string. Obviously, we will create one input by state property, id excluded (the database manage it by itself with the autoincrement).
 
-    Add a `.then()` after the `insert` and call `findCount()` and send it result on response of the request.
+- 7/ In order to edit the global State, we  create a function `handleCars()`that need to parameters (the name of the propertie, a value) to update the state. Add it on each inputs.
 
-- 3/ Backend data validation.
-    now we will setup the validation of data with the `joi` module, who is already setup on this repos. we will create a function `validate` on *service* folder (for re-usability).
-    this function will take 2 parameter, `data` the data to verify and `forCreation` a boolean with true as default value.
-    we will create a `presence` constant, this constant will use `forCreation` for swap between "required" (if value is true) and "optional" (if value is false), this will be usefull later. this setup will be usefull on later step.
-    now we can enter on validation setup, first we need to create a Joi object with a list of key and which test we want this data key pass. we need to return this joi object.
+    The `handleData(name, value)` has 3 steps, 
+        the 1st one making a copy of the state `data`.
+        the 2nd one, editing the copy you made before with ```newCars[name] = value;```
+        And the last step, set the state `newCars` with the copy of the data edited.
 
-    just bellow you can see example
-    we have name of the object key on data : Joi ...
-    all the argument use after the Joi is referenced on the joi module documentation. make in sort that the verification match with the database.
-    ```
-    return Joi.object({
-      car_make: Joi.string().min(3).max(255).presence(presence),
-      ...
-    }).validate(data,{abortEarly: false }).error;
-    ```
 
-- 4/ Aply validation on controller .
-
-    now a little bit of refactorisation on the `add` function created at step 2.
-
-    we will need to call `validate` before call `insert` , we will store `validate` on a constant, we store for test if this constant is true(data is not on adequation with the test), we will need to respond a status 422 and to send the constant.
-
-    and if the constant where `validate` was store is false we will call `insert` for send the request.
-
-- 5/ Create endPoint on router.
-
-    Add the `add` function we create to a route on the `router.js` file with a post method.
-
-- 6/ Create the form on frontend.
-
-    now a bit of front, we will need to prepare a form on the *administration.jsx* page and to link it with the back by calling the back endpoint added on step 5.
-
-    we will need one state for store all the data of the form initialised on object with all keys of the `table` as an empty string.
-
-    for sure we will create one input by key available on `table`, id excluded (the database manage it by itself with the autoincrement)
-
-- 7/ Editing State .
-
-    we will need 2 thing a function `handleData()` to update data (just one key of the object) and to add an id with the `data` key name on the input for edit data.
-
-    The `handleData()` function will need 2 parameter, a `place` who are the key name we want to edit and a `value` literraly the value on the input.
-
-    The `handleData()` function is on 3 steps, 1st one make a copy of the state `data`.
-
-    2nd step, edit the copy you make before with ```newData[place] = value;```.
-
-    last step, set the state `data` with the copy of data edited.
-
-- 9/ Add event on each input .
-
-    we can now pass `handleData()` at all input to an `onChange` event (tips we will use `event.target.id` and `event.target.value` as argument).
-
-- 10/ Prepare the validation management.
-
-    Create a state `message`, init at an empty string, who will be usefull for display validation error on front.
-
-    And a `<h3>{message}</h3>` for display the message when needed.
+- 8/ Prepare the validation management.
+    - Create a state `message` initialized with an empty string, which will be usefull for display validation error on front.
+    And a `<h3>{message}</h3>` in order to display it when needed.
 
 - 11/ Front validation
     We need to create a data validation function on front.
