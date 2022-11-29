@@ -225,15 +225,46 @@ On this `add()`, console.log() your data and send a response to the client.
     If we add a cars the Home page crash it's normal we need to change couple of things. The 1st one is the pagination in our `browse` method on *carsControler.js*, (Back End). We need to add a `Math.ceil()` in our response.
     The 2nd change is done by editing the `map()` who generate `NavButton` by changing its `index` key with ```index={index + 1}``` on the *Home.jsx* .
     And the last one is to edit the button text from ```index + 1``` to ```index``` on *NavButton.jsx*.
+  
+## Let's go on Deleting a car.
+- 9/ On the back end, on the *carsControllers.js*, create a new `delete` method and call it on a `delete` route (*router.js*)('/cars/:id') . Inside this method, console.log(id).
+   - res.send("Ok")
+
+- 10/ On the back end, on the *carsManager.js* from *models* folder, create the method `delete()`.
+  This will take 1 parameter the `ìd` of the item to delete.
+  This `delete()` function will return the query we need for deleting the entry on our database. 
+  ```  
+  delete(id) {
+    return this.connection.query(`DELETE FROM ${this.table} WHERE id = ?`, [
+      id
+    ]);
+  }
+  ```
+
+- 11/ Back on your *carsControllers.js*, add the call() to this new method with the id.
+    If an error occured, don't forget to catch it and manage it
+    Otherwise, we got the confirmation of the new data on our response with the affectedRow.
+    ```
+      res
+        .sendStatus(202)
+     ```
+  
+- 12/ On the Front End, on the *cars.jsx* page, we should add a delete button if the `user.role === "admin"` and a new state to display a modal 'On toggle of the button) to confirm the deletion.
+  
+- 13/ Create a new componant *carForm.jsx* and import it as modal (Don't hesitate to custom it or try the react-modal option). This modal should get the id, the data of the car and the method to close the modal as props.
+  - Inside display a small text using the data of the cars to ask for confirmation
+  - Add 2 buttons : One to close the modal (using the method of the parent) and one to call a `deleteCars` function
+  - The `deleteCars()` function should use the `apiConnexion` to request the back on delete with the id on param.
+  - If success, `navigate('/')` to home page, otherwise, close the modal and add an erreur message to the user
     
 ## Let's go on Updating a car.
-- 9/ On the back end, on the *carsControllers.js*, create a new `edit` method and call it on a `put` route (*router.js*)('/cars/:id') . Inside this method, console.log(id) and console.log(data).
+- 14/ On the back end, on the *carsControllers.js*, create a new `edit` method and call it on a `put` route (*router.js*)('/cars/:id') . Inside this method, console.log(id) and console.log(data).
    - res.send("Ok")
    - First, we will check the data with our previous methods. Just pass "optionnal" as the second argument.
     -If !error, res.send("OK").
     -Else res.send the error with the correct status
 
-- 10/ On the back end, on the *carsManager.js* from *models* folder, create the method `update()`.
+- 15/ On the back end, on the *carsManager.js* from *models* folder, create the method `update()`.
   This will take 2 parameters the `car` and the `ìd` of the item to edit.
   This `update()` function will return the query we need for updating a new entry on our database. 
   ```  
@@ -245,7 +276,7 @@ On this `add()`, console.log() your data and send a response to the client.
   }
   ```
 
-- 11/ Back on your *carsControllers.js*, add the call() to this new method with the data.
+- 16/ Back on your *carsControllers.js*, add the call() to this new method with the data.
     If an error occured, don't forget to catch it and manage it
     Otherwise, we got the confirmation of the new data on our response with the affectedRow.
     ```
@@ -253,52 +284,32 @@ On this `add()`, console.log() your data and send a response to the client.
         .sendStatus(204)
      ```
 
+- 17/ On the Front End, we will use the modal for the deletion again. Update it with all the form inputs of the *Administration.jsx*.
+    - Set a new state with the car props you receive and dispatch it on your form.
+    - get the `handleCar()` method of the *Administration.jsx* to manage the update of your state
+    - Add a button with a onclick => sendForm function and create the One.
+    - On this function, use the `apiConnexion` to send the data to the back end with a `put` http method and the data in the body.
+    - Refacto a little bit your "cars.jsx*. Create a function `getCar()` and add the call to the data on the back End. Add the call to this function in the `useEffect()`.
+  
+```
+const getCar = () => {
+    apiConnexion
+      .get(`/cars/${id}`)
+      .then((json) => {
+        setCar(json.data);
+      })
+      .catch((err) => console.error(err));
+};
+useEffect(() => {
+   getCar();
+}, []);
+```
+  
+    - Pass this new function as props on your modal and call it if the update request succeed and close the modal.
+  
 
 
-- 17/ create Form Again.
 
-    we can win time and make a copy of our form created on *administration.jsx* and place it on *Cars.jsx* on *pages* folder.
-
-    Like we want that only Admin user can see this form, we will need to add a verfication like that :
-    ```
-    {car && user?.role === "admin" && (...) }
-    ```
-
-    We can win time again and copy `handleData()` fonction form *Administration.jsx* and replace `data` and `setData` by `car` and `setCar` on the paste of `handleData()`.
-
-- 18/ Call the backEnd route.
-
-    We can create the `sendForm()` function, who will validate(with the `validate()` function) the data and send the request(with `apiConnexion`) if the data is valid(Think to give the data to your fetch, without the id ).
-
-    We successfully create the update route, she's work and we can make the last one who are the delete.
-
-- 19/ Back to our friend the Controller.
-
-    You will say me "But why we don't go to the manager first this time ?" and i will respond you "No my dear, the `delete` method are already created on the abstract manager, and as *CarsManager* is a direct child of *AbstractManager* he have access to it.".
-
-    So we can create the `deleteOne()` function on *CarsControllers.js* file. (Think to add it on the export)
-
-- 20/ Add it to the router.
-
-    Create the endpoint for deletion with an id params on our *router.js* file.
-
-    ```
-    router.delete(...)
-    ```
-
-- 21/ Time to call this on Front.
-
-    Let's back to our *Cars.jsx* file, add a delete button on our form .
-
-    This button will use an `OnClick` event for call the backEnd endpoint with `apiconnexion`. By the way of `deleteCar()` function, we will create this function.
-
-    If request succeed we can use `useNavigate()` function for bring back admin to home page.
-
-- 22/ And for the last one.
-
-    Just a joke, all your work is done you actually build a full back-Office and it use a full `CRUD`
-    you can create , read , update and delete content of your database all of this in your app.
-    Congratulation you finish this Part 2 with success.
 
 
 
