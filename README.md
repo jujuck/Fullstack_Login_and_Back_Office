@@ -41,17 +41,16 @@ In the first part, we will implement a login process and manage it on react usin
 Then, we will use our context to activate button and page to manage our product (create, update and delete it)
 
 ### First part
-- 1/ With the package.json, you add tailwind library to your project. You can see on the *Home.jsx* page, that some classes are here. But nothing works. Folloow the doc on taliwinds to finish the installation
+- 1/ With the package.json, you add tailwind library to your project. You can see on the *Home.jsx* page, that some classes are here. But nothing works. Follow the doc on tailwinds to finish the installation
 <a href="https://tailwindcss.com/docs/guides/create-react-app" target="_blank" >Clic Here</a>
 
-- 2/ Now, don't forget to go on your back edn foler ``` cd backend ```, create your *.env* file with your MySQl credentials, and ``` npm run migrate``` to generate the database.
+- 2/ Now, don't forget to go on your back end folder ``` cd backend ```, create your *.env* file with your MySQl credentials, and ``` npm run migrate``` to generate the database. Add the *.env* file in your Front End with the backEnd url
 
 - 3/ Go back to the root of the project and run ``` npm run dev ```. You should see the home page with the products and a page to see the detail of them.
 
 - 4/ Now, create a new page *Login.jsx*
 
-- 5/ Add a nav bar to all your pages,     - Add this line of exeption on your eslint rules "react/jsx-no-constructed-context-values": "off",
-with a <Link to="/"> and an other one <Link to="/login" > to access your page. Don"t forget to style the nav bar a little bit with the tailwind library. Integrate then the *Login.jsx* in the route in *App.jsx*
+- 5/ Add a nav bar to all your pages, with a <Link to="/"> and an other one <Link to="/login" > to access your page. Don't forget to style the nav bar a little bit with the tailwind library. Integrate then the *Login.jsx* in the route in *App.jsx*
 
 - 6/ On the *Login.jsx* page, add two inputs (email and password). Create a global state to control it as an object. On the input manage the change of your state by merging your old state with the new value of your key
   ```
@@ -59,13 +58,13 @@ with a <Link to="/"> and an other one <Link to="/login" > to access your page. D
     setConnexion({ ...connexion, email: e.target.value })()
   }
   ```
-Add a <Button> with a function (handleLogin()), triggered `onClick` that `console.log()` the value of your state.
+  Add a <Button> with a function (handleLogin()), triggered `onClick` that `console.log()` the value of your state.
 
-- 7/ Adding some logique, we will check the validity of the email and the password, to activate the button.
-Use the regex here to test (/^[^\s@]+@[^\s@]+\.[^\s@]+$/) the email, and this one for password (/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])/). If the test succeed, we will send the request, else, add a message to your user for incorrect credentials.
+- 7/ Adding some logic, we will check the validity of the email and the password, to activate the button.
+Use the regex here to test (/^[^\@]+@[^\@]+\.[^\@]+$/) the email, and this one for password (/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])/). If the test succeed, we will send the request, else, add a message to your user for incorrect credentials.
 
 - 8/ Now, on your function, ``` POST ``` your state to the ``` /login ``` endPoint on your back end.
-    - on your backend, create a new file *userController.js* on the controller folder. Inside, create a fonction `login()` that `console.log()` the data you post (on your body). Don't forget to add the route ou your *router.js* file.
+    - on your backend, create a new file *usersControllers.js* on the controller folder. Inside, create a fonction `login()` that `console.log()` the data you post (on your body). Don't forget to add the route ou your *router.js* file.
     - on top of this file, we will create a constante with some fake data to check 
     ```
     const user = {
@@ -77,7 +76,7 @@ Use the regex here to test (/^[^\s@]+@[^\s@]+\.[^\s@]+$/) the email, and this on
     ```
     - In you function, use Joi to check the data you receive (correct email, correct password) (cd backend, npm install joy)
     - If `false` => `res.status(400).send("Wrong credentials")
-    - If `true` => next step, check if the eamil is right and the password too
+    - If `true` => next step, check if the email is right and the password too
         - If `false` => `res.status(400).send("Wrong credentials")
         - If `true` => `res
             .cookie("access_token", "connexion validated", {
@@ -120,7 +119,7 @@ const ExportContextUser = {
 };
 export default ExportContextUser;
 ```
-    - Add this line of exeption on your eslint rules "react/jsx-no-constructed-context-values": "off", and the new alias "@context": "./src/context"
+    - Add this line of exeption on your eslint rules "react/jsx-no-constructed-context-values": "off", and the new alias on vite.config and jsconfig "@context": "./src/context"
     - Add the `ExportContextUser` globaly on your app, just below the *<BrowserRouter>*
     - Import the **context** on your *login.jsx* and consume the `handleuser(data)` function to memorize it. Then `navigate()`.
 
