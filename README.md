@@ -147,7 +147,7 @@ Congrats !!! Your have now a fully operationnel login system.
 
 ### Second part
   
-## We will start with the back end part of the storie. So open, Postman, get ready to send a Post request with a body in Json format.
+## We will start with the back end part of the story. So open, Postman, get ready to send a Post request with a body in Json format.
 Here is an example of the data
   ```
 {
@@ -179,7 +179,7 @@ On this `add()`, console.log() your data and send a response to the client.
     -If !error, res.send("OK").
     -Else res.send the error with the correct status
   
-- 4/ On the *carsManagers.js*, we need to create a function `insert()`. This `insert()` function will return the query we need for create a new entry on our database. 
+- 4/ On the *carsManagers.js*, we need to create a function `insert()`. This `insert()` function will return the query we need for creating a new entry on our database. 
     ```
     insert(data) {
       return this.connection.query(
@@ -194,16 +194,12 @@ On this `add()`, console.log() your data and send a response to the client.
 
 - 5/ Back on your *carsControllers.js*, add the call() to this new methods with the data.
     If an error occured, don't forget to catch it and manage it
-    Otherwise, we got the confirmation of the new data on our response with the insertId. Before sending it back to the client, we need to call the `findCount()` method to update our number of page
-    .then(), send all the data and count back to the client
-  
-  ```
+    Otherwise, we got the confirmation of the new data on our response with the insertId.
+
+```
   res
     .status(200)
-    .send({
-      cars: { ...req.body, id: createdCars[0].insertId },
-      pages: Math.ceil(count[0].pages / 50),
-    });
+    .send({ ...req.body, id: createdCars[0].insertId });
  ```
   
 ## On the Front
@@ -219,89 +215,45 @@ On this `add()`, console.log() your data and send a response to the client.
 
 
 - 8/ Prepare the validation management.
-    - Create a state `message` initialized with an empty string, which will be usefull for display validation error on front.
+    - Create a state `message` initialized with an empty string, which will be usefull for display validation error for the user.
     And a `<h3>{message}</h3>` in order to display it when needed.
+    - In the service folder, create a *cars.js* file. Inside, add a function `validateCar(car)` that will check all the fields of the data and return an object with a status and a message
+    -if the status returned is `true`, you can request on `post` with your `apiConnexion` ,(Don't forget to add your car as body)
+    -check if the data returned is correct. If so, add a success message for the user.
 
-- 11/ Front validation
-    We need to create a data validation function on front.
+- DEBUGG
+    If we add a cars the Home page crash it's normal we need to change couple of things. The 1st one is the pagination in our `browse` method on *carsControler.js*, (Back End). We need to add a `Math.ceil()` in our response.
+    The 2nd change is done by editing the `map()` who generate `NavButton` by changing its `index` key with ```index={index + 1}``` on the *Home.jsx* .
+    And the last one is to edit the button text from ```index + 1``` to ```index``` on *NavButton.jsx*.
+    
+## Let's go on Updating a car.
+- 9/ On the back end, on the *carsControllers.js*, create a new `edit` method and call it on a `put` route (*router.js*)('/cars/:id') . Inside this method, console.log(id) and console.log(data).
+   - res.send("Ok")
+   - First, we will check the data with our previous methods. Just pass "optionnal" as the second argument.
+    -If !error, res.send("OK").
+    -Else res.send the error with the correct status
 
-    create a *controlData.js* file on *service* folder.
+- 10/ On the back end, on the *carsManager.js* from *models* folder, create the method `update()`.
+  This will take 2 parameters the `car` and the `ìd` of the item to edit.
+  This `update()` function will return the query we need for updating a new entry on our database. 
+  ```  
+  update(car, id) {
+    return this.connection.query(`UPDATE ${this.table} SET ? WHERE id = ?`, [
+      car,
+      id,
+    ]);
+  }
+  ```
 
-    in this file we will create a function `instance`, this function will take 2 parameter , the `data` to verify and `setMessage`.
-
-- 12/ Send the form.
-
-    Create a `sendForm()` function who will be give as `onSumbit` event to the form.
-
-     This function will take a parameter `e` (event for prevent refresh) and will use `apiConnexion` (created during first part of this live coding) for fetch to the root created at step 5
-
-     If request succed we can set a succes message and set the amount of pages with response we receive from backend
-
-- 12-bis/ Edit the page amount.
-
-    We will need to move the state `nbPages` state from *home.jsx* to a new `context` create a new file *Pages.jsx* on *context* folder. you can copy *User.jsx* and rename it (think to change the state with the original `nbPages` from *Home.jsx* and to delete it).
-
-    After this add the context *main.jsx*.
+- 11/ Back on your *carsControllers.js*, add the call() to this new method with the data.
+    If an error occured, don't forget to catch it and manage it
+    Otherwise, we got the confirmation of the new data on our response with the affectedRow.
     ```
-    <React.StrictMode>
-      <User.UserProvider>
-        <Pages.PagesProvider>
-          <App />
-        </Pages.PagesProvider>
-      </User.UserProvider>
-    </React.StrictMode>
-    ```
+      res
+        .sendStatus(204)
+     ```
 
-    import now the state from the context using `useContext`:
-    ```
-    const { handleNbPages, nbPages } = useContext(Pages.PagesContext);
-    ```
 
-    Think to replace `setNbPages` by `handleNpPages` on *Home.jsx*.
-
-    And to call your context on *administration.jsx* for update the amount of pages in `sendForm()`
-
-- 13/ Edit front structure (if needed)
-    If we add a cars the Home page crash it's normal we
-    will need to change 3 things. the 1st one is the pagination in our `browse` method on *carsControler.js*, we need to add a `Math.ceil()` in our response who take all the `pages` key ```pages: Math.ceil(count[0].pages / 50)```.
-    The 2nd change to do is editing the maps who generate `NavButton` by change it `index` key with ```index={index + 1}``` on the *Home.jsx* .
-    And the last one is to edit render on *NavButton.jsx* change button text from ```index +1``` to ```index```.
-
-- A little speech.
-
-    Fine we succesfuly make all the work for add a car and it work we can see it on the *Home* page.
-
-    we can now pass to the next step create an edit route.
-
-- 14/ Come back to manager.
-
-    Let's start the 2nd chapter of this exercise.
-
-    On the *CarsManager.jsx* from *models* folder create the method `update()`.
-
-    This will take 2 parameter the `data` and the `ìd` of the item to edit.
-
-- 15/ Controller's Turn.
-
-    Create an `Edit` method.
-
-    We will need 4 things:
-
-    - take the `data from `req.body`;
-
-    - take the `id` From `req.params.id`;
-
-    - validate the `data` with `validation()` created at step 3, but this time we will call it like that `validation(data, false)` the false is for said the value is not required.
-
-    The user can only edit `color` of a car but let the other like they already are.
-
-    - and for finishe we need to call the `update` method we create during step 14, and manage response and error.
-
-- 16/ Endpoint.
-
-    We can now add a new `put` route on *router.js*. It will take an `id` as params.
-
-    Nice all is good for backEnd now we can go back to front.
 
 - 17/ create Form Again.
 
