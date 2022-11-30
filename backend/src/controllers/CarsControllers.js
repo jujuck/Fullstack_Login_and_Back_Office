@@ -58,7 +58,18 @@ const add = (req, res) => {
 };
 const deleteOne = (req, res) => {
   const { id } = req.params;
-  res.send("Ok", id);
+  models.cars
+    .delete(id)
+    .then((response) => {
+      if (response[0].affectedRows === 0) {
+        res.sendStatus(404);
+      } else {
+        res.sendStatus(204);
+      }
+    })
+    .catch((err) => {
+      res.status(500).send(err);
+    });
 };
 
 module.exports = {
