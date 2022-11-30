@@ -37,6 +37,13 @@ class CarsManager extends AbstractManager {
       id,
     ]);
   }
+
+  update(car, id) {
+    return this.connection.query(`UPDATE ${this.table} SET ? WHERE id = ?`, [
+      car,
+      id,
+    ]);
+  }
 }
 
 module.exports = CarsManager;
