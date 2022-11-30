@@ -8,7 +8,7 @@ const browse = (req, res) => {
       models.cars
         .findCount()
         .then(([count]) => {
-          res.status(200).json({ cars, pages: count[0].pages / 50 });
+          res.status(200).json({ cars, pages: Math.ceil(count[0].pages / 50) });
         })
         .catch((err) => {
           console.error(err);

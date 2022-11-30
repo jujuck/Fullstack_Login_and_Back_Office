@@ -7,7 +7,7 @@ function NavButton({ setPages, index }) {
       type="button"
       className="rounded-full border w-16 hover:bg-zinc-200"
     >
-      {index + 1}
+      {index}
     </button>
   );
 }

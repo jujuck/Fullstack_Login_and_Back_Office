@@ -27,7 +27,7 @@ export default function Home() {
       </h1>
       <div className="flex justify-center gap-1 m-auto">
         {new Array(nbPages).fill().map((_, index) => {
-          return <NavButton index={index} setPages={setSearchParams} />;
+          return <NavButton index={index + 1} setPages={setSearchParams} />;
         })}
       </div>
       <div className="flex flex-wrap m-12">
