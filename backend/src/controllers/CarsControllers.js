@@ -36,7 +36,14 @@ const read = (req, res) => {
     });
 };
 
+const add = (req, res) => {
+  const car = req.body;
+  if (car) res.status(200).send(car);
+  else res.status(500).send("Error on adding a new car");
+};
+
 module.exports = {
   browse,
   read,
+  add,
 };
