@@ -40,8 +40,21 @@ const read = (req, res) => {
 const add = (req, res) => {
   const car = req.body;
   const error = validate(car, "required");
-  if (!error) res.status(200).send(car);
-  else res.status(422).send(error);
+  if (!error) {
+    models.cars
+      .insert(car)
+      .then((createdCars) => {
+        res.status(200).send({
+          ...req.body,
+          id: createdCars[0].insertId,
+        });
+      })
+      .catch(() => {
+        res.status(500).Send("Error on adding a new car");
+      });
+  } else {
+    res.status(422).send(error);
+  }
 };
 
 module.exports = {
