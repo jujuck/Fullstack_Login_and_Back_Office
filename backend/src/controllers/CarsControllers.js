@@ -56,9 +56,14 @@ const add = (req, res) => {
     res.status(422).send(error);
   }
 };
+const deleteOne = (req, res) => {
+  const { id } = req.params;
+  res.send("Ok", id);
+};
 
 module.exports = {
   browse,
   read,
   add,
+  deleteOne,
 };
