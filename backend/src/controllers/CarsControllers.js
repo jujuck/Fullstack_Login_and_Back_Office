@@ -56,6 +56,7 @@ const add = (req, res) => {
     res.status(422).send(error);
   }
 };
+
 const deleteOne = (req, res) => {
   const { id } = req.params;
   models.cars
@@ -72,9 +73,18 @@ const deleteOne = (req, res) => {
     });
 };
 
+const update = (req, res) => {
+  const car = req.body;
+  const { id } = req.params;
+  const error = validate(car, "optional");
+  if (!error) res.send("Ok", id);
+  else res.status(422).send(error);
+};
+
 module.exports = {
   browse,
   read,
   add,
   deleteOne,
+  update,
 };
