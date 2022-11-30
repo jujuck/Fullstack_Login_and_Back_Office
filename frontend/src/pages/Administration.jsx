@@ -11,9 +11,13 @@ function Administration() {
     title: "",
     keyword: "",
   });
-  // warning don't let a console warn during your work,
-  // I only make this for commit step by step and i will delete it after.
-  console.warn(setCar);
+
+  const handleCar = (name, value) => {
+    const newCar = { ...car };
+    newCar[name] = value;
+    setCar(newCar);
+  };
+
   return (
     <div>
       <h1 className="text-3xl mb-4">Administration</h1>
@@ -29,6 +33,7 @@ function Administration() {
               name="car_make"
               value={car.car_make}
               placeholder="car make by"
+              onChange={(e) => handleCar(e.target.name, e.target.value)}
             />
           </label>
           <label className="w-[40%] flex flex-col text-2xl">
@@ -40,6 +45,7 @@ function Administration() {
               name="car_model"
               value={car.car_model}
               placeholder="car model"
+              onChange={(e) => handleCar(e.target.name, e.target.value)}
             />
           </label>
           <label className="w-[40%] flex flex-col text-2xl">
@@ -51,6 +57,7 @@ function Administration() {
               name="car_year_model"
               value={car.car_year_model}
               placeholder="year of creation"
+              onChange={(e) => handleCar(e.target.name, e.target.value)}
             />
           </label>
           <label className="w-[40%] flex flex-col text-2xl">
@@ -62,6 +69,7 @@ function Administration() {
               name="color"
               value={car.color}
               placeholder="car color"
+              onChange={(e) => handleCar(e.target.name, e.target.value)}
             />
           </label>
           <label className="w-[40%] flex flex-col text-2xl">
@@ -73,6 +81,7 @@ function Administration() {
               name="city"
               value={car.city}
               placeholder="car city origin"
+              onChange={(e) => handleCar(e.target.name, e.target.value)}
             />
           </label>
           <label className="w-[40%] flex flex-col text-2xl">
@@ -84,6 +93,7 @@ function Administration() {
               name="title"
               value={car.title}
               placeholder="car title"
+              onChange={(e) => handleCar(e.target.name, e.target.value)}
             />
           </label>
           <label className="w-[40%] flex flex-col text-2xl">
@@ -95,6 +105,7 @@ function Administration() {
               name="keyword"
               value={car.keyword}
               placeholder="car keywords"
+              onChange={(e) => handleCar(e.target.name, e.target.value)}
             />
           </label>
           <label className="w-[90%] flex flex-col text-2xl">
@@ -106,6 +117,7 @@ function Administration() {
               name="descr"
               value={car.descr}
               placeholder="car description"
+              onChange={(e) => handleCar(e.target.name, e.target.value)}
             />
           </label>
         </div>
