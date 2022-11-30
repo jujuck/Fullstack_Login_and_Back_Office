@@ -1,12 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
+import User from "@context/User";
 
 import apiConnexion from "@services/apiConnexion";
+import CarModal from "@components/CarModal";
 
 function Cars() {
+  const { user } = useContext(User.UserContext);
   const [car, setCar] = useState();
+  const [isDisplay, setIsDisplay] = useState(false);
   const { id } = useParams();
 
+  const handleDisplay = () => {
+    setIsDisplay(!isDisplay);
+  };
   useEffect(() => {
     apiConnexion
       .get(`/cars/${id}`)
@@ -29,6 +36,14 @@ function Cars() {
             {car.keyword} / city : {car.city}
           </p>
         </div>
+      )}
+      {user?.role === "admin" && (
+        <button type="button" onClick={() => handleDisplay()}>
+          delete
+        </button>
+      )}
+      {user?.role === "admin" && isDisplay && (
+        <CarModal id={id} handleDisplay={handleDisplay} />
       )}
     </div>
   );
