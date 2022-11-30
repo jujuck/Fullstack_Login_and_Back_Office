@@ -1,4 +1,5 @@
 const models = require("../models");
+const validate = require("../services/cars");
 
 const browse = (req, res) => {
   models.cars
