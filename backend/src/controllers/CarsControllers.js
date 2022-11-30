@@ -76,9 +76,23 @@ const deleteOne = (req, res) => {
 const update = (req, res) => {
   const car = req.body;
   const { id } = req.params;
-  const error = validate(car, "optional");
-  if (!error) res.send("Ok", id);
-  else res.status(422).send(error);
+  const validation = validate(car, "optional");
+  if (validation) {
+    res.status(422).send(validation);
+  } else {
+    models.cars
+      .update(car, id)
+      .then((updatedCar) => {
+        if (updatedCar[0].affectedRows === 0) {
+          res.sendStatus(404);
+        } else {
+          res.sendStatus(204);
+        }
+      })
+      .catch(() => {
+        res.status(500).Send("Error on adding a new car");
+      });
+  }
 };
 
 module.exports = {

@@ -14,11 +14,17 @@ function Cars() {
   const handleDisplay = () => {
     setIsDisplay(!isDisplay);
   };
-  useEffect(() => {
+
+  const getCar = () => {
     apiConnexion
       .get(`/cars/${id}`)
-      .then((json) => setCar(json.data))
+      .then((json) => {
+        setCar(json.data);
+      })
       .catch((err) => console.error(err));
+  };
+  useEffect(() => {
+    getCar();
   }, []);
 
   return (
@@ -43,7 +49,12 @@ function Cars() {
         </button>
       )}
       {user?.role === "admin" && isDisplay && (
-        <CarModal id={id} handleDisplay={handleDisplay} />
+        <CarModal
+          carProps={car}
+          id={id}
+          getCar={getCar}
+          handleDisplay={handleDisplay}
+        />
       )}
     </div>
   );
