@@ -31,6 +31,12 @@ class CarsManager extends AbstractManager {
       ]
     );
   }
+
+  delete(id) {
+    return this.connection.query(`DELETE FROM ${this.table} WHERE id = ?`, [
+      id,
+    ]);
+  }
 }
 
 module.exports = CarsManager;
