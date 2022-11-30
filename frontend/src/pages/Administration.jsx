@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 
+import apiConnexion from "@services/apiConnexion";
+import validateCar from "@services/cars";
+
 function Administration() {
   const [car, setCar] = useState({
     car_make: "",
@@ -11,6 +14,7 @@ function Administration() {
     title: "",
     keyword: "",
   });
+  const [message, setMessage] = useState("");
 
   const handleCar = (name, value) => {
     const newCar = { ...car };
@@ -18,10 +22,27 @@ function Administration() {
     setCar(newCar);
   };
 
+  const sendForm = (e) => {
+    e.preventDefault();
+    const { status, errorMessage } = validateCar(car);
+    if (status) {
+      apiConnexion
+        .post("/cars", { ...car })
+        .then(() => {
+          setMessage("car succesfully added");
+        })
+        .catch((err) => {
+          console.warn(err);
+        });
+    } else {
+      setMessage(errorMessage);
+    }
+  };
+
   return (
     <div>
       <h1 className="text-3xl mb-4">Administration</h1>
-      <form>
+      <form onSubmit={(e) => sendForm(e)}>
         <h2 className="text-2xl mb-4"> send a new car</h2>
         <div className="flex flex-wrap justify-evenly gap-5 mb-4">
           <label className="w-[40%] flex flex-col text-2xl">
@@ -124,6 +145,7 @@ function Administration() {
         <button className=" justify-self-center" type="submit">
           send Form
         </button>
+        <h3 className=" text-red-700">{message}</h3>
       </form>
     </div>
   );
