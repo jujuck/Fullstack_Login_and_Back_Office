@@ -39,8 +39,9 @@ const read = (req, res) => {
 
 const add = (req, res) => {
   const car = req.body;
-  if (car) res.status(200).send(car);
-  else res.status(500).send("Error on adding a new car");
+  const error = validate(car, "required");
+  if (!error) res.status(200).send(car);
+  else res.status(422).send(error);
 };
 
 module.exports = {
