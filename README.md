@@ -204,6 +204,11 @@ On this `add()`, console.log() your data and send a response to the client.
   
 ## On the Front
 
+  - DEBUGG
+    If we add a cars the Home page crash it's normal we need to change couple of things. The 1st one is the pagination in our `browse` method on *carsControler.js*, (Back End). We need to add a `Math.ceil()` in our response.
+    The 2nd change is done by editing the `map()` who generate `NavButton` by changing its `index` key with ```index={index + 1}``` on the *Home.jsx* .
+    And the last one is to edit the button text from ```index + 1``` to ```index``` on *NavButton.jsx*.
+  
 - 6/ Create the form on frontend, we need to prepare a form on the *Administration.jsx* page and to connect it with the back by calling the back endpoint added previously. We will need one state to store all the data of this form initialised on object with all keys of the `table` as an empty string. Obviously, we will create one input by state property, id excluded (the database manage it by itself with the autoincrement).
 
 - 7/ In order to edit the global State, we  create a function `handleCars()`that need to parameters (the name of the propertie, a value) to update the state. Add it on each inputs.
@@ -220,11 +225,6 @@ On this `add()`, console.log() your data and send a response to the client.
     - In the service folder, create a *cars.js* file. Inside, add a function `validateCar(car)` that will check all the fields of the data and return an object with a status and a message
     -if the status returned is `true`, you can request on `post` with your `apiConnexion` ,(Don't forget to add your car as body)
     -check if the data returned is correct. If so, add a success message for the user.
-
-- DEBUGG
-    If we add a cars the Home page crash it's normal we need to change couple of things. The 1st one is the pagination in our `browse` method on *carsControler.js*, (Back End). We need to add a `Math.ceil()` in our response.
-    The 2nd change is done by editing the `map()` who generate `NavButton` by changing its `index` key with ```index={index + 1}``` on the *Home.jsx* .
-    And the last one is to edit the button text from ```index + 1``` to ```index``` on *NavButton.jsx*.
   
 ## Let's go on Deleting a car.
 - 9/ On the back end, on the *carsControllers.js*, create a new `delete` method and call it on a `delete` route (*router.js*)('/cars/:id') . Inside this method, console.log(id).
