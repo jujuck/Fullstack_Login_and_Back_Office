@@ -308,9 +308,56 @@ useEffect(() => {
     - Pass this new function as props on your modal and call it if the update request succeed and close the modal.
   
 
+### Third Part
+Now we will improve our code and secure the way we connect and check for the right user in the backend using hashed password and cookies
 
+# First creating a new user using postman as an admin
+- 1/ Add a table users on your DB ('id', 'email' unique, 'hashedpassword', 'role')
+- 2/ Create a new route ('POST') on the url ('signup') and a new method on the usersController as signup()
+- 3/ On your new method, check the data you receive on your body with joy. In order to do that, you can store the method used previously by storing it in a middleware
+- 4/ In the services folder, create a new file `users.js`. Inside, add argon2 (don't forget to install it) and configure the options
 
+```const hashingOptions = {
+  type: argon2.argon2id,
+  memoryCost: 2 ** 16,
+  timeCost: 5,
+  parallelism: 1,
+};
+```
 
+- 5/ Implement the function to hash the received password and return it. Export your function.
+- 6/ Now, in your controller import your function adn use it to hash the password received in the body of your request.
+- 7/ Using a model, create your user. Check in your db to see the result
 
+# Connecting to this user. 
+We will reuse the route done in the first part but, this time, checking the user from the db
 
+- 1/ First, we need to check if the user exist in the DB. We will query the user adn his hashedpassword from the email received
+- 2/ If exist, we will compare the password, adding a new method from argon2 in our services.
+- 3/ If password matched, we will add the jwt module and create a token from a secret phrase (ideally store in the .env)
+
+```
+const token = jwtSign(
+  { email: rows[0].email, role: rows[0].role },
+  { expiresIn: "1h" }
+);
+```
+- 4/ Delete the password from the data ([rows])
+- 5/ Then, send the response to the user setting the cookie with the token
+
+```
+.cookie("access_token", token, {
+    httpOnly: true,
+    expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
+  })
+```
+
+- 6/ Check with your front end if a cookie is set on the developper tool
+
+# Checking the user rights
+
+- 1/ Now add a middleware `checkAuth` for checking the user in your 'POST' ('cars') in `router.js`. Create the function in the user middleware.
+- 2/ Install the cookie-parser module and require it on the `app.js`
+- 3/ In your middleware, require jwt and check the validity of your cookie... If correct then next(), otherwise, send an error message to your user
+- 4/ Duplicate the middleware for the other route that you need to protect
 
