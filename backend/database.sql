@@ -10,6 +10,13 @@ create table cars (
 	keyword VARCHAR(255)
 );
 
+create table users (
+	id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+	email VARCHAR(255) NOT NULL UNIQUE,
+	hashedpassword VARCHAR(255) NOT NULL,
+	role VARCHAR(255) NOT NULL
+);
+
 insert into cars (id, car_make, car_model, car_year_model, color, city, descr, title, keyword) values (1, 'Aston Martin', 'Vanquish S', 2005, 'Red', 'Qintong', 'In hac habitasse platea dictumst. Morbi vestibulum, velit id pretium iaculis, diam erat fermentum justo, nec condimentum neque sapien placerat ante. Nulla justo.', 'Donec ut mauris eget massa tempor convallis. Nulla neque libero, convallis eget, eleifend luctus, ultricies eu, nibh.', 'nec nisi vulputate nonummy maecenas');
 insert into cars (id, car_make, car_model, car_year_model, color, city, descr, title, keyword) values (2, 'Chevrolet', 'Camaro', 2011, 'Goldenrod', 'La Tigra', 'Aenean lectus. Pellentesque eget nunc. Donec quis orci eget orci vehicula condimentum.', 'Nulla tellus.', 'massa quis augue luctus tincidunt');
 insert into cars (id, car_make, car_model, car_year_model, color, city, descr, title, keyword) values (3, 'Ford', 'Tempo', 1984, 'Mauv', 'Szczerbice', 'Duis bibendum, felis sed interdum venenatis, turpis enim blandit mi, in porttitor pede justo eu massa. Donec dapibus. Duis at velit eu est congue elementum.', 'Duis bibendum. Morbi non quam nec dui luctus rutrum.', 'morbi odio odio elementum');
