@@ -1,24 +1,30 @@
 const models = require("../models");
 const { hashPass } = require("../services/auth");
 
-const user = {
-  email: "john@wildcodeschool.com",
-  password: "WildCodeSchool2022",
-  name: "John Smith",
-  role: "admin",
-};
-
 const validateUser = (req, res) => {
-  if (req.body.email === user.email && req.body.password === user.password) {
-    res
-      .status(201)
-      .cookie("access_token", "connexion validated", {
-        httpOnly: true,
-      })
-      .json({ name: user.name, role: user.role, email: user.email });
-  } else {
-    res.status(500).send("Wrongs credentials");
-  }
+  models.users
+    .findOne(req.body)
+    .then(([user]) => {
+      if (user[0]) {
+        res.sendStatus(200);
+      } else {
+        res.sendStatus(401);
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.sendStatus(500);
+    });
+  // if (req.body.email === user.email && req.body.password === user.password) {
+  //   res
+  //     .status(201)
+  //     .cookie("access_token", "connexion validated", {
+  //       httpOnly: true,
+  //     })
+  //     .json({ name: user.name, role: user.role, email: user.email });
+  // } else {
+  //   res.status(500).send("Wrongs credentials");
+  // }
 };
 
 const createUser = async (req, res) => {
