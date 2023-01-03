@@ -10,7 +10,7 @@ const validateUser = (req, res) => {
         if (await verifyHash(user[0].hashedpassword, req.body.password)) {
           const myUser = { ...user[0] };
           delete myUser.hashedpassword;
-          const token = jwt.sign(user[0], process.env.JWT_AUTH_SECRET, {
+          const token = jwt.sign(myUser, process.env.JWT_AUTH_SECRET, {
             expiresIn: "24h",
           });
 
@@ -19,7 +19,7 @@ const validateUser = (req, res) => {
             .cookie("access_token", token, {
               httpOnly: true,
             })
-            .json({ role: user[0].role, email: user[0].email });
+            .json(myUser);
         } else {
           res.sendStatus(401);
         }
