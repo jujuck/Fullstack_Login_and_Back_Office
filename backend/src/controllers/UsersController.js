@@ -1,12 +1,16 @@
 const models = require("../models");
-const { hashPass } = require("../services/auth");
+const { hashPass, verifyHash } = require("../services/auth");
 
 const validateUser = (req, res) => {
   models.users
     .findOne(req.body)
-    .then(([user]) => {
+    .then(async ([user]) => {
       if (user[0]) {
-        res.sendStatus(200);
+        if (await verifyHash(user[0].hashedpassword, req.body.password)) {
+          res.sendStatus(200);
+        } else {
+          res.sendStatus(401);
+        }
       } else {
         res.sendStatus(401);
       }

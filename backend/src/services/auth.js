@@ -11,4 +11,8 @@ const hashPass = (password) => {
   return argon2.hash(password, hashingOptions);
 };
 
-module.exports = { hashPass };
+const verifyHash = (hashFromDB, passwordSend) => {
+  return argon2.verify(hashFromDB, passwordSend, hashingOptions);
+};
+
+module.exports = { hashPass, verifyHash };
