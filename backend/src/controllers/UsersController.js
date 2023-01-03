@@ -1,3 +1,6 @@
+const models = require("../models");
+const { hashPass } = require("../services/auth");
+
 const user = {
   email: "john@wildcodeschool.com",
   password: "WildCodeSchool2022",
@@ -18,8 +21,17 @@ const validateUser = (req, res) => {
   }
 };
 
-const createUser = (req, res) => {
-  res.sendStatus(200);
+const createUser = async (req, res) => {
+  const hashedPassword = await hashPass(req.body.password);
+
+  models.users
+    .insert({ ...req.body, hashedPassword })
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch(() => {
+      res.sendStatus(500);
+    });
 };
 
 module.exports = { validateUser, createUser };
