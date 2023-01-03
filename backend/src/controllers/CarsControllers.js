@@ -39,6 +39,7 @@ const read = (req, res) => {
 
 const add = (req, res) => {
   const car = req.body;
+
   const error = validate(car, "required");
   if (!error) {
     models.cars
