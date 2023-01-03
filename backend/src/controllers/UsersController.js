@@ -1,3 +1,4 @@
+const jwt = require("jsonwebtoken");
 const models = require("../models");
 const { hashPass, verifyHash } = require("../services/auth");
 
@@ -7,7 +8,18 @@ const validateUser = (req, res) => {
     .then(async ([user]) => {
       if (user[0]) {
         if (await verifyHash(user[0].hashedpassword, req.body.password)) {
-          res.sendStatus(200);
+          const myUser = { ...user[0] };
+          delete myUser.hashedpassword;
+          const token = jwt.sign(user[0], process.env.JWT_AUTH_SECRET, {
+            expiresIn: "24h",
+          });
+
+          res
+            .status(201)
+            .cookie("access_token", token, {
+              httpOnly: true,
+            })
+            .json({ role: user[0].role, email: user[0].email });
         } else {
           res.sendStatus(401);
         }
@@ -19,16 +31,6 @@ const validateUser = (req, res) => {
       console.error(err);
       res.sendStatus(500);
     });
-  // if (req.body.email === user.email && req.body.password === user.password) {
-  //   res
-  //     .status(201)
-  //     .cookie("access_token", "connexion validated", {
-  //       httpOnly: true,
-  //     })
-  //     .json({ name: user.name, role: user.role, email: user.email });
-  // } else {
-  //   res.status(500).send("Wrongs credentials");
-  // }
 };
 
 const createUser = async (req, res) => {
