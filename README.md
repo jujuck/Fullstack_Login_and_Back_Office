@@ -351,8 +351,22 @@ const token = jwtSign(
     expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
   })
 ```
-
-- 6/ Check with your front end if a cookie is set on the developper tool
+- 6/ In your back end, in àpp.js`add the line for the credential
+```app.use(
+  cors({
+    origin: process.env.FRONTEND_URL ?? "http://localhost:3000",
+    optionsSuccessStatus: 200,
+    credentials: true,
+  })
+);
+``
+As in your `apiConnexion.js` in the front End
+```const instance = axios.create({
+  baseURL: import.meta.env.VITE_BACKEND_URL,
+  withCredentials: true
+});
+```
+- 7/ Check with your front end if a cookie is set on the developper tool
 
 # Checking the user rights
 
