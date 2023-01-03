@@ -32,4 +32,8 @@ const validateUser = (req, res) => {
   }
 };
 
-module.exports = { validateUser };
+const createUser = (req, res) => {
+  res.sendStatus(200);
+};
+
+module.exports = { validateUser, createUser };

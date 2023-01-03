@@ -11,5 +11,6 @@ router.post("/cars", carsControllers.add);
 router.delete("/cars/:id", carsControllers.deleteOne);
 
 router.post("/login", usersControllers.validateUser);
+router.post("/signup", usersControllers.createUser);
 
 module.exports = router;
